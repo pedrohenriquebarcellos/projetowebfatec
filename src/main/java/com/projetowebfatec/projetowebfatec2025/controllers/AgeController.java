@@ -3,7 +3,6 @@ package com.projetowebfatec.projetowebfatec2025.controllers;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -18,6 +17,10 @@ public class AgeController {
     public String getAge(@PathVariable String age) {
         try {
             Integer currentAge = Integer.parseInt(age);
+
+            if (currentAge < 0) {
+                throw new NumberFormatException();
+            }
 
             if (currentAge < CHILDREN) {
                 return "Criança";

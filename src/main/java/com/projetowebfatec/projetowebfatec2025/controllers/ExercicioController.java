@@ -18,4 +18,30 @@ public class ExercicioController {
     public String GetRouteName(@PathVariable Optional<String> name) {
         return name.get();
     }
+
+    @GetMapping("/get-age/{age}")
+    public String ReturnAge(@PathVariable Integer age) {
+        try {
+            if (age < 0) {
+                throw new NumberFormatException();
+            }
+
+            if (age <= 12) {
+                return "Criança";
+            }
+
+            if (age <= 18) {
+                return "Adolescente";
+            }
+
+            if (age <= 60) {
+                return "Adulto";
+            }
+
+            return "Idoso";
+
+        } catch (NumberFormatException e) {
+            return "Erro: O valor de 'age' não é um número válido!";
+        }
+    }
 }
