@@ -9,6 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ExercicioController {
 
+    private static final Double LOW = 18.5;
+    private static final Double NORMAl = 24.9;
+    private static final Double ABOVENORMAL = 29.9;
+    private static final Double OBESITY1 = 34.9;
+    private static final Double OBESITY2 = 39.9;
+    private static final Double OBESITY3 = 40.0;
+
     @GetMapping("")
     public String HelloWorld() {
         return "No Param defined";
@@ -78,6 +85,52 @@ public class ExercicioController {
             return true;
         } catch (NumberFormatException e) {
             return false;
+        }
+    }
+
+    /**
+     * Get IMC using Weight and Height
+     * @param weight
+     * @param height
+     * @return String
+     */
+    @GetMapping("get-imc/{weight}/{height}")
+    public String GetIMC(@PathVariable String weight, @PathVariable String height) {
+        try {
+            if (!IsNumeric(weight) && !IsNumeric(height)) {
+                throw new NumberFormatException();
+            }
+
+            if (Double.parseDouble(weight) == 0|| Double.parseDouble(height) == 0) {
+                throw new NumberFormatException();
+            }
+
+            Double imc = Double.parseDouble(weight) / Math.pow(Double.parseDouble(height), 2);
+
+            if (imc < LOW ) {
+                return "Below weight";
+            } 
+
+            if (imc <= NORMAl) {
+                return "Normal weight";
+            }  
+
+            if (imc <= ABOVENORMAL) {
+                return "Above normal weight";
+            }
+
+            if (imc <= OBESITY1) {
+                return "Obesity 1 weight";
+            }
+
+            if (imc <= OBESITY2) {
+                return "Obesity 2 weight";
+            }
+
+            return "Obesity 3 weight";
+
+        } catch (NumberFormatException e) {
+            return "Os valores passados são inválidos";
         }
     }
 }
