@@ -9,5 +9,4 @@ public class Projetowebfatec2025Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Projetowebfatec2025Application.class, args);
 	}
-
 }
