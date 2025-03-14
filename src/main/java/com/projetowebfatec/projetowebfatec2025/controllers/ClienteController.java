@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,12 +29,12 @@ public class ClienteController {
 
     //http://localhost:8080/api/cliente/criarCliente => POST
     @PostMapping("/criarCliente")
-    public String CriarCliente(@RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> CriarCliente(@RequestBody Cliente cliente) {
         cliente.setId(idCount++);
         clientes.add(cliente);
 
         logger.info("Recebido JSON: Nome={}, Idade={}", cliente.getNome(), cliente.getIdade());
-        return "O Cliente "+cliente.getNome()+ " de idade "+cliente.getIdade()+" foi criado";
+        return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
     @DeleteMapping("/deletarCliente/{id}")
@@ -42,7 +44,7 @@ public class ClienteController {
     }
 
     @PutMapping("/atualizarCliente/{id}")
-    public String AtualizarCliente(@RequestBody Cliente clienteAtualizado) {
+    public ResponseEntity<Cliente> AtualizarCliente(@RequestBody Cliente clienteAtualizado) {
         for (Cliente cliente : clientes) {
             if (cliente.getId().equals(clienteAtualizado.getId())) {
 
@@ -58,11 +60,11 @@ public class ClienteController {
                     cliente.setEndereco(clienteAtualizado.getEndereco());
                 }
 
-                return "Ciente id:" + clienteAtualizado.getId() + " foi atualizado com sucesso";
+                return new ResponseEntity<>(clienteAtualizado, HttpStatus.OK);
             }
         }
 
-        return "Cliente não encontrado";
+        return new ResponseEntity<>(clienteAtualizado, HttpStatus.UPGRADE_REQUIRED);
     }
 
     @GetMapping("/listarClientes")
