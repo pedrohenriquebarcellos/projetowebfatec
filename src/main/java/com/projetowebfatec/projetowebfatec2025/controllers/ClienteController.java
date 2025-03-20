@@ -1,7 +1,6 @@
 package com.projetowebfatec.projetowebfatec2025.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.projetowebfatec.projetowebfatec2025.entities.Cliente;
 
@@ -70,5 +69,15 @@ public class ClienteController {
     @GetMapping("/listarClientes")
     public List<Cliente> ListarClientes() {
         return clientes;
+    }
+
+    @GetMapping("/buscarCliente/{id}")
+     public ResponseEntity<?> buscarClientePorId(@PathVariable Long id) {
+        for (Cliente cliente : clientes) {
+            if (cliente.getId().equals(id)) {
+                return ResponseEntity.ok(cliente);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente com ID " + id + " não encontrado.");
     }
 }
