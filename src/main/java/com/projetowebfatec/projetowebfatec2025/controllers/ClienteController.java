@@ -13,12 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/cliente")
@@ -29,7 +23,6 @@ public class ClienteController {
     private static final Logger logger = LoggerFactory.getLogger(ClienteController.class.getName());
 
     private final List<Cliente> clientes = new ArrayList<>();
-    private Long idCount = 1L;
 
     //http://localhost:8080/api/cliente/criarCliente => POST
     @PostMapping("/criarCliente")
@@ -39,9 +32,14 @@ public class ClienteController {
     }
 
     @DeleteMapping("/deletarCliente/{id}")
-    public String DeletarCliente(@PathVariable Long id) {
-        clientes.removeIf(clientes -> clientes.getId().equals(id));
-        return "Cliente id:" + id + " removido com sucesso";
+    public ResponseEntity<?> DeletarCliente(@PathVariable Long id) {
+        boolean clienteDeletado = clienteService.deletarCliente(id);
+        
+        if (clienteDeletado) {
+            return new ResponseEntity<>(clienteDeletado, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(clienteDeletado, HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/atualizarCliente/{id}")

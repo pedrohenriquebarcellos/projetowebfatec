@@ -20,4 +20,11 @@ public class ClienteService {
         var cliente = clienteRepository.save(cadastarCliente);
         return cliente;
     }
+
+    public Boolean deletarCliente(Long id) {
+        clienteRepository.deleteById(id);
+
+        var clienteDeletado = clienteRepository.findById(id);
+        return clienteDeletado.isPresent();
+    }
 }
