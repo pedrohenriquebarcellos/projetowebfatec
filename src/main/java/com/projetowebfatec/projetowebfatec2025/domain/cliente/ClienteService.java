@@ -1,6 +1,7 @@
 package com.projetowebfatec.projetowebfatec2025.domain.cliente;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,4 +28,21 @@ public class ClienteService {
         var clienteDeletado = clienteRepository.findById(id);
         return clienteDeletado.isPresent();
     }
+
+    public boolean atualizarCliente(Long id, Cliente clienteAtualizado) {
+        Optional<Cliente> clienteOptional = buscarClientePorId(id);
+        if (clienteOptional.isPresent()) {
+            Cliente cliente = clienteOptional.get();
+            cliente.setNome(clienteAtualizado.getNome());
+            cliente.setIdade(clienteAtualizado.getIdade());
+            cliente.setEndereco(clienteAtualizado.getEndereco());
+        }
+
+        return false;
+    }
+
+    public Optional<Cliente> buscarClientePorId(Long id) {
+        return clienteRepository.findById(id);
+    }
+    
 }

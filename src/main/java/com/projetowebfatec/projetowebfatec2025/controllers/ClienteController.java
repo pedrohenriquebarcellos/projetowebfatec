@@ -7,6 +7,7 @@ import com.projetowebfatec.projetowebfatec2025.entities.Cliente;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,11 +74,8 @@ public class ClienteController {
 
     @GetMapping("/buscarCliente/{id}")
      public ResponseEntity<?> buscarClientePorId(@PathVariable Long id) {
-        for (Cliente cliente : clientes) {
-            if (cliente.getId().equals(id)) {
-                return ResponseEntity.ok(cliente);
-            }
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente com ID " + id + " não encontrado.");
+        Optional<Cliente> cliente = clienteService.buscarClientePorId(id);
+        return cliente.<ResponseEntity<?>>map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente com ID " + id + " não encontrado."));
     }
 }
